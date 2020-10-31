@@ -1,0 +1,22 @@
+{
+  "name": "gestao-de-alunos",
+  "version": "1.0.0",
+  "description": "Web service para gestao de alunos.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oliveirabr/gestao-de-alunos.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/oliveirabr/gestao-de-alunos/issues"
+  },
+  "homepage": "https://github.com/oliveirabr/gestao-de-alunos#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
