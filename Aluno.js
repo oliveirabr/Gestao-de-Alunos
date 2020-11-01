@@ -1,6 +1,6 @@
 class Aluno {
     constructor(dao) {
-      this.dao = dao
+      this.dao = dao;
     }
   
     dropTable() {
@@ -22,22 +22,22 @@ class Aluno {
     }
 
     InsereAluno(aluno) {
-        const { rga, nome, curso, situacao, registrado_em } = aluno
-        //console.log(rga, nome, curso, situacao, registrado_em);
-        return this.dao.run(
+        const { rga, nome, curso, situacao, registrado_em } = aluno;
+        this.dao.run(
           'INSERT INTO aluno (rga, nome, curso, situacao, registrado_em) VALUES (?, ?, ?, ?, ?)',
           [rga, nome, curso, situacao, registrado_em]
-          );
+        );
+
+        return this.dao.get(
+            `SELECT * FROM aluno ORDER BY id DESC`, [])
     }
 
     ListarAlunos(){
-        //console.log(this.dao.db.all(`SELECT * FROM aluno`))
-        return this.dao.all(`SELECT * FROM aluno`);
+        return this.dao.all(`SELECT * FROM aluno`, [])
     }
 
     SelecionaAluno(id){
-        //console.log(id);
-        return this.dao.db.get(`SELECT * FROM aluno WHERE id = ?`, [id]);
+        return this.dao.get(`SELECT * FROM aluno WHERE id = ?`, [id]);
     }
 
     AtualizarAluno(aluno) {
