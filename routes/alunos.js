@@ -98,7 +98,7 @@ router.post('/', (req, res, next) => {
         }
 
         /* verifica se o curso é uma string vazia */
-        if (aluno.nome === "") {
+        if (aluno.curso === "") {
             res.status(400).send({ erro: 'O campo \'curso\' não pode ser uma string vazia!' });
             return;
         }
@@ -168,15 +168,6 @@ router.put('/:id', (req, res, next) => {
         return;
     }
 
-    const alunoAtualizado = {
-        id: id,
-        rga: req.body.rga,
-        nome: req.body.nome,
-        curso: req.body.curso,
-        situacao: req.body.situacao,
-        registrado_em: req.body.registrado_em
-    }
-
     /* verifica se o aluno existe no banco de dados */
     alunoBanco.selecionarAluno(id).then(result => {
         if (result === undefined) {
@@ -185,8 +176,84 @@ router.put('/:id', (req, res, next) => {
         }
     });
 
+    const _aluno = {
+        id: id,
+        rga: req.body.rga,
+        nome: req.body.nome,
+        curso: req.body.curso,
+        situacao: req.body.situacao,
+    }
+
+    var formato = /^([\d]{4}\.){2}[\d]{3}-[\d]{1}$/g;
+    
+    /* verifica se o rga foi informado */
+    if (_aluno.rga === undefined) {
+        res.status(400).send({ erro: 'O campo \'rga\' deve ser preenchido mesmo que não vá ser alterado!' });
+        return;
+    }
+
+    /* verifica se rga é do tipo string */
+    if (typeof _aluno.rga !== 'string') {
+        res.status(400).send({ erro: 'O campo \'rga\' deve ser do tipo string!' });
+        return;
+    }
+
+    /* verifica se o rga obedece o formato definido */
+    if (!_aluno.rga.match(formato)) {
+        res.status(400).send({ erro: 'O campo \'rga\' deve obedecer o formato \'NNNN.NNNN.NNN-N\'!' });
+        return;
+    }
+
+    /* verifica se o nome foi informado */
+    if (_aluno.nome === undefined) {
+        res.status(400).send({ erro: 'O campo \'nome\' deve ser preenchido mesmo que não vá ser alterado!' });
+        return;
+    }
+
+    /* verifica se nome é do tipo string */
+    if (typeof _aluno.nome !== 'string') {
+        res.status(400).send({ erro: 'O campo \'nome\' deve ser do tipo string!' });
+        return;
+    }
+
+    /* verifica se o nome é uma string vazia */
+    if (_aluno.nome === "") {
+        res.status(400).send({ erro: 'O campo \'nome\' não pode ser uma string vazia!' });
+        return;
+    }
+
+    /* verifica se o curso foi informado */
+    if (_aluno.curso === undefined) {
+        res.status(400).send({ erro: 'O campo \'curso\' deve ser preenchido mesmo que não vá ser alterado!' });
+        return;
+    }
+
+    /* verifica se curso é do tipo string */
+    if (typeof _aluno.curso !== 'string') {
+        res.status(400).send({ erro: 'O campo \'curso\' deve ser do tipo string!' });
+        return;
+    }
+
+    /* verifica se o curso é uma string vazia */
+    if (_aluno.curso === "") {
+        res.status(400).send({ erro: 'O campo \'curso\' não pode ser uma string vazia!' });
+        return;
+    }
+
+    /* verifica se a situacao foi informada */
+    if (_aluno.situacao === undefined) {
+        res.status(400).send({ erro: 'O campo \'situacao\' deve ser preenchido mesmo que não vá ser alterado!' });
+        return;
+    }
+
+    /* verifica se a situação foi preenchida com os valores aceitos */
+    if (_aluno.situacao !== "ativo" && _aluno.situacao !== "inativo") {
+        res.status(400).send({ erro: 'O campo \'situacao\' deve ser preenchido com \'ativo\' ou \'inativo\'!' });
+        return;
+    }
+
     /* atualiza as informações do aluno */
-    alunoBanco.atualizarAluno(alunoAtualizado).then(result => {
+    alunoBanco.atualizarAluno(_aluno).then(result => {
         res.status(200).send({ aluno: result });
     });
 });

@@ -41,29 +41,24 @@ class Aluno {
 
     listarAlunos(limite, pagina, nome) {
 
-        return this.dao.all(
-            `SELECT * FROM aluno`
-        );
-
-        /* implementar a paginação */
         const _limite = isNaN(limite) ? 25 : limite;
         const _pagina = isNaN(pagina) ? 1 : pagina;
 
         if (!isNaN(nome)) {
             return this.dao.all(
-                `SELECT * FROM aluno WHERE nome = ? OFFSET ? ROWS FETCH NEXT ? ROWS ONLY`,
+                `SELECT * FROM aluno WHERE nome = ? LIMIT ? OFFSET ?`,
                 [
                     nome,
-                    ((_pagina - 1) * _limite),
-                    _limite
+                    _limite,
+                    ((_pagina - 1) * _limite)
                 ]
             );
         } else {
             return this.dao.all(
-                `SELECT * FROM aluno OFFSET ? ROWS FETCH NEXT ? ROWS ONLY`,
+                `SELECT * FROM aluno LIMIT ? OFFSET ?`,
                 [
-                    ((_pagina - 1) * _limite),
-                    _limite
+                    _limite,
+                    ((_pagina - 1) * _limite)
                 ]
             );
         }
@@ -75,16 +70,15 @@ class Aluno {
 
     atualizarAluno(aluno) {
 
-        const { id, rga, nome, curso, situacao, registrado_em } = aluno;
+        const { id, rga, nome, curso, situacao } = aluno;
 
         this.dao.run(
-            `UPDATE aluno SET rga = ?, nome = ?, curso = ?, situacao = ?, registrado_em = ? WHERE id = ?`,
+            `UPDATE aluno SET rga = ?, nome = ?, curso = ?, situacao = ? WHERE id = ?`,
             [
                 rga,
                 nome,
                 curso,
                 situacao,
-                registrado_em,
                 id
             ]
         );
