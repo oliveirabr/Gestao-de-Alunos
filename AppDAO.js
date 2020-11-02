@@ -2,59 +2,61 @@ const sqlite3 = require('sqlite3')
 const Promise = require('bluebird')
 
 class AppDAO {
-  constructor(dbFilePath) {
-    this.db = new sqlite3.Database(dbFilePath, (err) => {
-      if (err) {
-        console.log('Não foi possível conectar ao banco de dados', err)
-      } else {
-        console.log('Banco de Dados Conectado')
-      }
-    })
-  }
 
-  //permite que sejam feitas consultas assincronas
-  run(sql, params = []) {
-    return new Promise((resolve, reject) => {
-      this.db.run(sql, params, function (err) {
-        if (err) {
-          console.log('Erro na execução do sql: ' + sql)
-          console.log(err)
-          reject(err)
-        } else {
-          resolve({ id: this.lastID })
-        }
-      })
-    })
-  }
-  
-  get(sql, params = []) {
-    return new Promise((resolve, reject) => {
-      this.db.get(sql, params, (err, result) => {
-        if (err) {
-          console.log('Erro na execução do sql: ' + sql)
-          console.log(err)
-          reject(err)
-        } else {
-          resolve(result)
-        }
-      })
-    })
-  }
+    constructor(dbFilePath) {
+        this.db = new sqlite3.Database(dbFilePath, (err) => {
+            if (err) {
+                console.log('Não foi possível conectar ao banco de dados!', err);
+            } else {
+                console.log('Banco de dados conectado!');
+            }
+        });
+    }
 
-  all(sql, params = []) {
-    return new Promise((resolve, reject) => {
-      this.db.all(sql, params, (err, rows) => {
-        if (err) {
-          console.log('Erro na execução do sql: ' + sql)
-          console.log(err)
-          reject(err)
-        } else {
-          resolve(rows)
-        }
-      })
-    })
-  }
+    //permite que sejam feitas consultas assincronas
+    run(sql, params = []) {
+        return new Promise((resolve, reject) => {
+            this.db.run(sql, params, function (err) {
+                if (err) {
+                    console.log('Erro na execução do sql: ' + sql);
+                    console.log(err);
+                    reject(err);
+                } else {
+                    resolve({
+                        id: this.lastID
+                    });
+                }
+            });
+        });
+    }
 
+    get(sql, params = []) {
+        return new Promise((resolve, reject) => {
+            this.db.get(sql, params, (err, result) => {
+                if (err) {
+                    console.log('Erro na execução do sql: ' + sql);
+                    console.log(err);
+                    reject(err);
+                } else {
+                    resolve(result);
+                }
+            });
+        });
+    }
+
+    all(sql, params = []) {
+        return new Promise((resolve, reject) => {
+            this.db.all(sql, params, (err, rows) => {
+                if (err) {
+                    console.log('Erro na execução do sql: ' + sql);
+                    console.log(err);
+                    reject(err);
+                } else {
+                    resolve(rows);
+                }
+            });
+        });
+    }
 }
 
 module.exports = AppDAO
